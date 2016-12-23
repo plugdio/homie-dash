@@ -1,0 +1,1 @@
+Homie Dash does not collect or share personal information.
