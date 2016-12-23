@@ -1,0 +1,339 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Device"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Device id" />
+
+        <TextView
+            android:id="@+id/device_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Friendly name" />
+
+        <TextView
+            android:id="@+id/device_friendlyname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Description" />
+
+        <TextView
+            android:id="@+id/device_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Device firmware" />
+
+        <TextView
+            android:id="@+id/device_firmware"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:layout_marginTop="4dp"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Online" />
+
+        <TextView
+            android:id="@+id/device_online"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Last seen" />
+
+        <TextView
+            android:id="@+id/device_last_seen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Uptime" />
+
+        <TextView
+            android:id="@+id/device_uptime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="Signal" />
+
+        <TextView
+            android:id="@+id/device_signal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/colorAccent"
+            android:text="IP address" />
+
+        <TextView
+            android:id="@+id/device_ip_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:paddingBottom="10dp"
+            style="@style/DetailValue"
+            android:text="dummy value" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:paddingBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="\n" />
+
+        <!-- content starts here -->
+        <!--
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Device"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/device_layout_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/device_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="Device Id"
+                        android:text=""
+                        android:enabled="false"
+                        android:inputType="text"
+
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_friendlyname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_friendlyname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Friendly name"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Description"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_last_seen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_lastseen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Last seen"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_uptime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_uptime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Uptime"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_signal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_signal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Signal"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_ip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="IP address"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_fw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/input_fw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Last seen"
+                        android:enabled="false"
+                        />
+                </android.support.design.widget.TextInputLayout>
+        -->
+
+    </android.support.v7.widget.LinearLayoutCompat>
+</ScrollView>

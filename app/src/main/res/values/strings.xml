@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Homie Dash</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_deviceconfiguration">Add device</string>
+    <string name="title_activity_log">Logs</string>
+    <string name="title_activity_device_detail">Device details</string>
+    <string name="title_activity_device_detail2">Device</string>
+
+    <string name="githublink">tbd</string>
+
+</resources>

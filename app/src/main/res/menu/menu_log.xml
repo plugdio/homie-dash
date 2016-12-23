@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.plugdio.homiedash.MainActivity">
+    <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="100"
+        android:title="Clear logs"
+        app:showAsAction="never" />
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/show_mqtt_logs"
+            android:title="Show MQTT logs"
+            android:checked="true" />
+        <item
+            android:id="@+id/show_app_logs"
+            android:title="Show app logs"
+            android:checked="true" />
+    </group>
+
+</menu>

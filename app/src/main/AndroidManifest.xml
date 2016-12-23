@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.plugdio.homiedash">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <receiver
+        android:name=".AlarmReceiver"
+        android:process=":remote" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.plugdio.homiedash.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.plugdio.homiedash.DeviceAdd"
+            android:label="@string/title_activity_deviceconfiguration"
+            android:parentActivityName="com.plugdio.homiedash.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plugdio.homiedash.MainActivity" />
+            />
+        </activity>
+        <activity
+            android:name="com.plugdio.homiedash.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.plugdio.homiedash.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plugdio.homiedash.MainActivity" />
+        </activity>
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+        <service
+            android:name="com.plugdio.homiedash.Service.HomieDashService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name="com.plugdio.homiedash.LogActivity"
+            android:label="@string/title_activity_log"
+            android:parentActivityName="com.plugdio.homiedash.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plugdio.homiedash.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.plugdio.homiedash.DeviceDetail"
+            android:label="Device"
+            android:parentActivityName="com.plugdio.homiedash.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plugdio.homiedash.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.plugdio.homiedash.AboutActivity"
+            android:parentActivityName="com.plugdio.homiedash.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plugdio.homiedash.MainActivity" />
+        </activity>
+    </application>
+
+</manifest>

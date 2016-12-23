@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.plugdio.homiedash.DeviceDetail">
+    <item
+        android:id="@+id/delete_device_logs"
+        android:orderInCategory="100"
+        android:title="Clear device logs"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_device"
+        android:orderInCategory="200"
+        android:title="Delete device"
+        app:showAsAction="never" />
+
+</menu>

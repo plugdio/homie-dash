@@ -1,0 +1,120 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory android:title="MQTT details">
+
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="mqtt_broker_address"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="MQTT broker address" />
+
+        <EditTextPreference
+            android:defaultValue="1883"
+            android:key="mqtt_broker_port"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="MQTT broker port"
+            android:inputType="number" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="mqtt_authentication_switch"
+            android:title="Use MQTT authentication" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="mqtt_username"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="MQTT username"
+            android:dependency="mqtt_authentication_switch" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="mqtt_password"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="MQTT password"
+            android:inputType="textPassword"
+            android:dependency="mqtt_authentication_switch" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="mqtt_autoconnect_switch"
+            android:title="Persistent MQTT connection" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Homie details">
+
+        <EditTextPreference
+            android:defaultValue="devices/"
+            android:key="homie_base_topic"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Homie base topic" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="ota_switch"
+            android:title="Enable OTA" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="ota_host"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="OTA server host"
+            android:dependency="ota_switch" />
+
+        <EditTextPreference
+            android:defaultValue="80"
+            android:key="ota_port"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="OTA server port"
+            android:inputType="number"
+            android:dependency="ota_switch" />
+
+        <EditTextPreference
+            android:defaultValue="/ota"
+            android:key="ota_path"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="OTA HTTP path"
+            android:dependency="ota_switch" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Default network details">
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="wifi_ssid"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Wifi network name" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="wifi_password"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Wifi password"
+            android:inputType="textPassword" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
