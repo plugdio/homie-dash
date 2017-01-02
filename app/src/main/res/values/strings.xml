@@ -7,6 +7,6 @@
     <string name="title_activity_device_detail">Device details</string>
     <string name="title_activity_device_detail2">Device</string>
 
-    <string name="githublink">tbd</string>
+    <string name="githublink">https://github.com/plugdio/homie-dash</string>
 
 </resources>

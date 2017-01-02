@@ -59,6 +59,7 @@ public class DeviceDetail extends AppCompatActivity {
     private final String LOG_TAG = DeviceDetail.class.getName();
 
     private String deviceId;
+    private String deviceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class DeviceDetail extends AppCompatActivity {
         Intent intent = this.getIntent();
         if ((intent != null) && (intent.hasExtra(Intent.EXTRA_TEXT))) {
             deviceId = intent.getStringExtra(Intent.EXTRA_TEXT);
+            deviceName = intent.getStringExtra(Intent.EXTRA_TITLE);
         } else {
             Log.e(LOG_TAG, "no intent");
         }
@@ -78,7 +80,7 @@ public class DeviceDetail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Device " + deviceId);
+        setTitle(deviceName + " (" + deviceId + ")");
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);

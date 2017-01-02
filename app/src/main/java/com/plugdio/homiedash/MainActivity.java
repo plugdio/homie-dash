@@ -78,12 +78,26 @@ public class MainActivity extends AppCompatActivity {
         deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String devicePosition = deviceAdapter.getItem(position);
-//                Toast.makeText(getApplicationContext(), devicePosition, Toast.LENGTH_SHORT).show();
-                Log.d(LOG_TAG, "onItemClick: " + position + " - " + devicePosition);
+                String itemPosition = deviceAdapter.getItem(position);
+                Log.d(LOG_TAG, "onItemClick: " + position + " - " + itemPosition);
+
+                String myDeviceName = null;
+                String myDeviceId = null;
+
+                String devicePattern = "(.*)\\s\\((.*)\\)";
+                Pattern p = Pattern.compile(devicePattern);
+                Matcher m = p.matcher(itemPosition);
+                if (m.find()) {
+                    myDeviceName = m.group(1);
+                    myDeviceId = m.group(2);
+                    Log.d(LOG_TAG, "Device ID: " + myDeviceId);
+                    Log.d(LOG_TAG, "Device Name: " + myDeviceName);
+                }
+
 
                 Intent deviceDetailActivity = new Intent(getApplicationContext(), DeviceDetail.class);
-                deviceDetailActivity.putExtra(Intent.EXTRA_TEXT, devicePosition);
+                deviceDetailActivity.putExtra(Intent.EXTRA_TEXT, myDeviceId);
+                deviceDetailActivity.putExtra(Intent.EXTRA_TITLE, myDeviceName);
                 startActivity(deviceDetailActivity);
             }
         });
@@ -97,8 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
             for (Device d : itr) {
 
-                deviceAdapter.add(d.deviceId);
-
+                if (d.deviceName.equals(null) || d.deviceName == null) {
+                    deviceAdapter.add("- (" + d.deviceId + ")");
+                } else {
+                    deviceAdapter.add(d.deviceName + " (" + d.deviceId + ")");
+                }
             }
         } finally {
             devicesCursor.close();
@@ -180,8 +197,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
             String deviceId = notificationData.getString(HomieDashService.MQTT_MSG_RECEIVED_MSG);
-            deviceAdapter.add(deviceId);
-
+            deviceAdapter.add("- (" + deviceId + ")");
         }
     };
 
