@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String LOG_TAG = "MainActivity";
     private SQLiteDatabase db;
-    public ArrayAdapter<String> deviceAdapter;
+    public DeviceArrayAdapter deviceAdapter;
 
     WifiManager wifi;
     boolean wifiScanResultProcessed = false;
@@ -67,40 +66,16 @@ public class MainActivity extends AppCompatActivity {
         startMQTTBoxService();
 
         final ListView deviceListView = (ListView) findViewById(R.id.listview_devices);
+/*
         deviceAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.list_item_device,
                 R.id.list_item_device_textview
         );
+*/
+        ArrayList<Device> deviceEntries = new ArrayList<>();
+        deviceAdapter = new DeviceArrayAdapter(this, 0, deviceEntries);
 
-        deviceListView.setAdapter(deviceAdapter);
-
-        deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemPosition = deviceAdapter.getItem(position);
-                Log.d(LOG_TAG, "onItemClick: " + position + " - " + itemPosition);
-
-                String myDeviceName = null;
-                String myDeviceId = null;
-
-                String devicePattern = "(.*)\\s\\((.*)\\)";
-                Pattern p = Pattern.compile(devicePattern);
-                Matcher m = p.matcher(itemPosition);
-                if (m.find()) {
-                    myDeviceName = m.group(1);
-                    myDeviceId = m.group(2);
-                    Log.d(LOG_TAG, "Device ID: " + myDeviceId);
-                    Log.d(LOG_TAG, "Device Name: " + myDeviceName);
-                }
-
-
-                Intent deviceDetailActivity = new Intent(getApplicationContext(), DeviceDetail.class);
-                deviceDetailActivity.putExtra(Intent.EXTRA_TEXT, myDeviceId);
-                deviceDetailActivity.putExtra(Intent.EXTRA_TITLE, myDeviceName);
-                startActivity(deviceDetailActivity);
-            }
-        });
 
         CupboardSQLiteOpenHelper dbHelper = new CupboardSQLiteOpenHelper(this);
         db = dbHelper.getWritableDatabase();
@@ -111,15 +86,38 @@ public class MainActivity extends AppCompatActivity {
 
             for (Device d : itr) {
 
+                deviceEntries.add(d);
+/*
                 if (d.deviceName.equals(null) || d.deviceName == null) {
                     deviceAdapter.add("- (" + d.deviceId + ")");
                 } else {
                     deviceAdapter.add(d.deviceName + " (" + d.deviceId + ")");
                 }
+*/
             }
         } finally {
             devicesCursor.close();
         }
+
+        deviceListView.setAdapter(deviceAdapter);
+
+        //add event listener so we can handle clicks
+        AdapterView.OnItemClickListener adapterViewListener = new AdapterView.OnItemClickListener() {
+
+            //on click
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d(LOG_TAG, "onItemClick: " + position + " - " + deviceAdapter.getItem(position).deviceId);
+
+                Intent deviceDetailActivity = new Intent(getApplicationContext(), DeviceDetail.class);
+                deviceDetailActivity.putExtra(Intent.EXTRA_TEXT, deviceAdapter.getItem(position).deviceId);
+                deviceDetailActivity.putExtra(Intent.EXTRA_TITLE, deviceAdapter.getItem(position).deviceName);
+                startActivity(deviceDetailActivity);
+            }
+        };
+
+        //set the listener to the list view
+        deviceListView.setOnItemClickListener(adapterViewListener);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +195,8 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
             String deviceId = notificationData.getString(HomieDashService.MQTT_MSG_RECEIVED_MSG);
-            deviceAdapter.add("- (" + deviceId + ")");
+//TODO: fix this
+//            deviceAdapter.add("- (" + deviceId + ")");
         }
     };
 

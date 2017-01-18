@@ -1,7 +1,9 @@
 package com.plugdio.homiedash;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -12,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -147,7 +152,7 @@ public class DeviceDetail extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  Bundle savedInstanceState) {
 
             View rootView;
@@ -169,7 +174,7 @@ public class DeviceDetail extends AppCompatActivity {
                 rootView = inflater.inflate(R.layout.fragment_device_detail_device, container, false);
 
                 TextView textDeviceId = (TextView) rootView.findViewById(R.id.device_id);
-                TextView textDeviceDescription = (TextView) rootView.findViewById(R.id.device_description);
+                final TextView textDeviceDescription = (TextView) rootView.findViewById(R.id.device_description);
                 TextView textDeviceFriendlyName = (TextView) rootView.findViewById(R.id.device_friendlyname);
                 TextView textDeviceOnline = (TextView) rootView.findViewById(R.id.device_online);
                 TextView textDeviceLastSeen = (TextView) rootView.findViewById(R.id.device_last_seen);
@@ -177,8 +182,9 @@ public class DeviceDetail extends AppCompatActivity {
                 TextView textDeviceSignal = (TextView) rootView.findViewById(R.id.device_signal);
                 TextView textDeviceIP = (TextView) rootView.findViewById(R.id.device_ip_address);
                 TextView textDeviceFirmware = (TextView) rootView.findViewById(R.id.device_firmware);
+                Button buttonEditDeviceDescription = (Button) rootView.findViewById(R.id.edit_description);
 
-                Device myDevice = cupboard().withDatabase(db).query(com.plugdio.homiedash.Data.Device.class).withSelection("deviceId = ?", deviceId).get();
+                final Device myDevice = cupboard().withDatabase(db).query(com.plugdio.homiedash.Data.Device.class).withSelection("deviceId = ?", deviceId).get();
                 if (myDevice == null) {
                     Log.e(LOG_TAG, "Device doesn't exists");
                 } else {
@@ -195,6 +201,50 @@ public class DeviceDetail extends AppCompatActivity {
                     } else {
                         textDeviceDescription.setText("-");
                     }
+
+                    buttonEditDeviceDescription.setClickable(true);
+                    buttonEditDeviceDescription.setEnabled(true);
+                    buttonEditDeviceDescription.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d(LOG_TAG, "edit desc");
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Device description");
+
+                            final EditText input = new EditText(getContext());
+
+                            input.setText(textDeviceDescription.getText());
+                            builder.setView(input);
+
+                            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String desc = input.getText().toString();
+                                    Log.d(LOG_TAG, "input: " + desc);
+//                                    ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+
+                                    ContentValues values = new ContentValues(1);
+                                    values.put("description", desc);
+
+                                    cupboard().withDatabase(db).update(Device.class, values, "_id = ?", myDevice._id + "");
+                                    textDeviceDescription.setText(desc);
+
+                                }
+                            });
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //dialog.cancel();
+//                                    ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(input.getWindowToken(), 0);
+                                    dialog.dismiss();
+                                }
+                            });
+                            builder.show();
+
+                        }
+                    });
+
                     if (myDevice.deviceName != null) {
                         textDeviceFriendlyName.setText(myDevice.deviceName);
                     } else {
@@ -266,6 +316,7 @@ public class DeviceDetail extends AppCompatActivity {
             return rootView;
         }
 
+
         public void updateLog(String deviceId, String topic, String text) {
             if (logAdapter != null) {
                 logAdapter.insert(new LogEntry(LogEntry.LOGTYPE_MQTT, deviceId, topic, text), 0);
@@ -277,7 +328,6 @@ public class DeviceDetail extends AppCompatActivity {
             if (logAdapter != null) {
                 logAdapter.clear();
             }
-
         }
     }
 
@@ -335,6 +385,7 @@ public class DeviceDetail extends AppCompatActivity {
 
         }
     };
+
 
     @Override
     protected void onResume() {
