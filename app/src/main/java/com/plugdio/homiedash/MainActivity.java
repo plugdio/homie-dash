@@ -63,16 +63,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mqttStatusTextView = (TextView) findViewById(R.id.mqtt_status);
-        startMQTTBoxService();
+        startHomieDashService();
 
         final ListView deviceListView = (ListView) findViewById(R.id.listview_devices);
-/*
-        deviceAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.list_item_device,
-                R.id.list_item_device_textview
-        );
-*/
+
         ArrayList<Device> deviceEntries = new ArrayList<>();
         deviceAdapter = new DeviceArrayAdapter(this, 0, deviceEntries);
 
@@ -87,13 +81,6 @@ public class MainActivity extends AppCompatActivity {
             for (Device d : itr) {
 
                 deviceEntries.add(d);
-/*
-                if (d.deviceName.equals(null) || d.deviceName == null) {
-                    deviceAdapter.add("- (" + d.deviceId + ")");
-                } else {
-                    deviceAdapter.add(d.deviceName + " (" + d.deviceId + ")");
-                }
-*/
             }
         } finally {
             devicesCursor.close();
@@ -291,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to start the service
-    public void startMQTTBoxService() {
+    public void startHomieDashService() {
         Log.d(LOG_TAG, "HomieDashService should be started");
         startService(new Intent(this, HomieDashService.class));
     }
@@ -308,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         mqttStatusFilter.addAction(HomieDashService.MQTT_STATUS_INTENT);
         registerReceiver(mqttStatusReceiver, mqttStatusFilter);
 
-        startMQTTBoxService();
+        startHomieDashService();
         mqttStatusTextView.setText(statusMsg);
 
         IntentFilter mqttMessageFilter = new IntentFilter();

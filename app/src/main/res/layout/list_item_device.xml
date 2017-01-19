@@ -28,6 +28,7 @@
         android:id="@+id/device_status"
         android:padding="10dp"
         android:clickable="false"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:buttonTint="@color/colorAccent" />
 
 </LinearLayout>
