@@ -2,7 +2,6 @@ package com.plugdio.homiedash;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +44,6 @@ class DeviceArrayAdapter extends ArrayAdapter<Device> {
     //called when rendering the list
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.d(LOG_TAG, "getView: " + position + " of " + deviceEntries.size());
-
         if ((deviceEntries.size() == 0) || (deviceEntries.size() < position)) {
             return null;
         }
@@ -62,14 +59,14 @@ class DeviceArrayAdapter extends ArrayAdapter<Device> {
         RadioButton radioDeviceStatus = (RadioButton) view.findViewById(R.id.device_status);
 
 
-        if (device.deviceName.equals(null) || device.deviceName == null) {
+        if (device.deviceName == null || device.deviceName.equals(null)) {
             textDeviceNamme.setText(" - (" + device.deviceId + ")");
         } else {
             textDeviceNamme.setText(device.deviceName + " (" + device.deviceId + ")");
         }
 
 
-        if (device.online.equals("true")) {
+        if (device.online != null && device.online.equals("true")) {
             radioDeviceStatus.setChecked(true);
         } else {
             radioDeviceStatus.setChecked(false);

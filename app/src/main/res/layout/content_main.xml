@@ -12,6 +12,30 @@
     tools:context="com.plugdio.homiedash.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <ImageView
+        android:id="@+id/alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:src="@android:drawable/ic_dialog_alert"
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/alert_text"
+        android:layout_below="@+id/alert"
+        style="@style/SysTopicTitleName"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text=""
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

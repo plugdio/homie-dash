@@ -6,6 +6,8 @@
     <string name="title_activity_log">Logs</string>
     <string name="title_activity_device_detail">Device details</string>
     <string name="title_activity_device_detail2">Device</string>
+    <string name="alert_missing_config">Please go to Settings to setup the MQTT broker connection</string>
+    <string name="alert_exit">Press the back button once again to close the application.</string>
 
     <string name="githublink">https://github.com/plugdio/homie-dash</string>
 

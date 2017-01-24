@@ -102,13 +102,6 @@ public class HomieDashService extends Service {
     private String lastTopic = null;
     private String lastMessage = null;
 
-    private SharedPreferences sharedPrefs;
-
-    private String mqttHost;
-    private String mqttPort;
-    private boolean mqqtAuthEnabled;
-    private String mqttUser;
-    private String mqttPass;
     private boolean persistentMqtt;
     private String clientId;
 
@@ -150,9 +143,7 @@ public class HomieDashService extends Service {
         prefChangeFilter.addAction(SettingsActivity.PREF_CHANGED);
         registerReceiver(prefChangeReceiver, prefChangeFilter);
 
-        sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        persistentMqtt = sharedPrefs.getBoolean("mqtt_autoconnect_switch", false);
+        persistentMqtt = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("mqtt_autoconnect_switch", false);
 
         clientId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -163,7 +154,6 @@ public class HomieDashService extends Service {
             clientId = clientId.substring(0, 23);
         }
 
-        connect();
     }
 
     @Override
@@ -177,6 +167,9 @@ public class HomieDashService extends Service {
         Log.d(LOG_TAG, "MQTT Service started - onStart");
         broadcastServiceStatus("MQTT Status: " + connectionStatus.toString());
         broadcastReceivedMessage(lastTopic, lastMessage);
+
+        connect();
+
         return START_STICKY;
     }
 
@@ -194,13 +187,16 @@ public class HomieDashService extends Service {
 
     void connect() {
 
-        mqttHost = sharedPrefs.getString("mqtt_broker_address", null);
-        mqttPort = sharedPrefs.getString("mqtt_broker_port", null);
-        mqqtAuthEnabled = sharedPrefs.getBoolean("mqtt_authentication_switch", false);
-        mqttUser = sharedPrefs.getString("mqtt_username", null);
-        mqttPass = sharedPrefs.getString("mqtt_password", null);
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (mqttHost.isEmpty() || mqttPort.isEmpty()) {
+        String mqttHost = sharedPrefs.getString("mqtt_broker_address", null);
+        String mqttPort = sharedPrefs.getString("mqtt_broker_port", null);
+        Boolean mqqtAuthEnabled = sharedPrefs.getBoolean("mqtt_authentication_switch", false);
+        String mqttUser = sharedPrefs.getString("mqtt_username", null);
+        String mqttPass = sharedPrefs.getString("mqtt_password", null);
+
+        if ((mqttHost == null || mqttHost.isEmpty()) || (mqttPort == null || mqttPort.isEmpty())) {
             Log.e(LOG_TAG, "Missing MQTT config");
             changeStatus(ConnectionStatus.NO_CONFIG);
             return;
@@ -301,7 +297,7 @@ public class HomieDashService extends Service {
     }
 
     public void subscribe() {
-        baseTopic = sharedPrefs.getString("homie_base_topic", "devices");
+        baseTopic = PreferenceManager.getDefaultSharedPreferences(this).getString("homie_base_topic", "devices");
         if (baseTopic.endsWith("/")) {
             baseTopic = baseTopic.substring(0, baseTopic.length() - 1);
         }
@@ -478,7 +474,6 @@ public class HomieDashService extends Service {
 
                 } else if (!persistentMqtt && (value.equals("true"))) {
                     persistentMqtt = true;
-
                     connect();
                 }
             }
@@ -551,6 +546,8 @@ public class HomieDashService extends Service {
         try {
             return ((client != null) && (client.isConnected() == true));
         } catch (NullPointerException e) {
+            return false;
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }

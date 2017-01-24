@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     public DeviceArrayAdapter deviceAdapter;
 
+    private ImageView alertImage;
+    private TextView alertText;
+
+    private int backButtonCount = 0;
+
     WifiManager wifi;
     boolean wifiScanResultProcessed = false;
 
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        alertImage = (ImageView) findViewById(R.id.alert);
+        alertText = (TextView) findViewById(R.id.alert_text);
 
         mqttStatusTextView = (TextView) findViewById(R.id.mqtt_status);
         startHomieDashService();
@@ -174,6 +183,17 @@ public class MainActivity extends AppCompatActivity {
             statusMsg = notificationData.getString(
                     HomieDashService.MQTT_STATUS_MSG);
             mqttStatusTextView.setText(statusMsg);
+
+            Log.d(LOG_TAG, "status: " + statusCode);
+
+            if (statusCode == HomieDashService.ConnectionStatus.NO_CONFIG) {
+                alertImage.setVisibility(View.VISIBLE);
+                alertText.setText(getString(R.string.alert_missing_config));
+                alertText.setVisibility(View.VISIBLE);
+            } else {
+                alertImage.setVisibility(View.INVISIBLE);
+                alertText.setVisibility(View.INVISIBLE);
+            }
         }
     };
 
@@ -184,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
             String deviceId = notificationData.getString(HomieDashService.MQTT_MSG_RECEIVED_MSG);
 //TODO: fix this
 //            deviceAdapter.add("- (" + deviceId + ")");
+            recreate();
         }
     };
 
@@ -305,6 +326,8 @@ public class MainActivity extends AppCompatActivity {
         newDeviceFilter.addAction(HomieDashService.MQTT_NEW_DEVICE_INTENT);
         registerReceiver(newDeviceReceiver, newDeviceFilter);
 
+        backButtonCount = 0;
+
         super.onResume();
     }
 
@@ -339,5 +362,20 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (backButtonCount >= 1) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, getString(R.string.alert_exit), Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
+    }
+
 
 }
