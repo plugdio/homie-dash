@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private String LOG_TAG = "MainActivity";
     private SQLiteDatabase db;
     public DeviceArrayAdapter deviceAdapter;
+    private ArrayList<Device> deviceEntries;
+    private ListView deviceListView;
 
     private ImageView alertImage;
     private TextView alertText;
@@ -74,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         mqttStatusTextView = (TextView) findViewById(R.id.mqtt_status);
         startHomieDashService();
 
-        final ListView deviceListView = (ListView) findViewById(R.id.listview_devices);
+        deviceListView = (ListView) findViewById(R.id.listview_devices);
 
-        ArrayList<Device> deviceEntries = new ArrayList<>();
+        deviceEntries = new ArrayList<>();
         deviceAdapter = new DeviceArrayAdapter(this, 0, deviceEntries);
 
 
@@ -202,9 +204,30 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
             String deviceId = notificationData.getString(HomieDashService.MQTT_MSG_RECEIVED_MSG);
-//TODO: fix this
-//            deviceAdapter.add("- (" + deviceId + ")");
-            recreate();
+
+            Log.d(LOG_TAG, "adding device to mainscreen: " + deviceId);
+
+            // check if i know anything about the device
+            Device myDevice = cupboard().withDatabase(db).query(com.plugdio.homiedash.Data.Device.class).withSelection("deviceId = ?", deviceId).get();
+            if (myDevice == null) {
+                Log.d(LOG_TAG, "Device doesn't found");
+            } else {
+
+
+                for (Device device : deviceEntries) {
+                    if (device.deviceId.equals(myDevice.deviceId)) {
+                        Log.d(LOG_TAG, "Device in the list already, looks like a status change");
+                        deviceEntries.remove(device);
+                        continue;
+                    }
+                }
+
+                deviceEntries.add(myDevice);
+
+            }
+            deviceAdapter = new DeviceArrayAdapter(getBaseContext(), 0, deviceEntries);
+            deviceListView.setAdapter(deviceAdapter);
+
         }
     };
 

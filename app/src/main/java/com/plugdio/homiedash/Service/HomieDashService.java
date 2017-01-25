@@ -713,6 +713,9 @@ public class HomieDashService extends Service {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
             Log.d(LOG_TAG, "Device exists already, id: " + myDevice._id + " last seen at " + sdf.format(myDevice.lastSeenTime));
+
+            boolean updateNeeded = false;
+
             ContentValues values = new ContentValues(1);
             values.put("lastSeenTime", Calendar.getInstance().getTimeInMillis());
 
@@ -726,12 +729,25 @@ public class HomieDashService extends Service {
                     values.put("deviceIP", message);
                 } else if (myNodeId.equals("name")) {
                     values.put("deviceName", message);
+                } else if (myNodeId.equals("online")) {
+                    if (!message.equals(myDevice.online)) {
+                        Log.d(LOG_TAG, "Device's online state has changed from " + myDevice.online + " to " + message);
+                        updateNeeded = true;
+                    }
+                    values.put("online", message);
                 } else {
                     values.put(myNodeId, message);
                 }
             }
 
             cupboard().withDatabase(db).update(Device.class, values, "_id = ?", myDevice._id + "");
+
+            if (updateNeeded) {
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MQTT_NEW_DEVICE_INTENT);
+                broadcastIntent.putExtra(MQTT_MSG_RECEIVED_MSG, myDeviceId);
+                sendBroadcast(broadcastIntent);
+            }
         }
 
     }
