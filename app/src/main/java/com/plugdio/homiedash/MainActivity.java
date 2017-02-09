@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     WifiManager wifi;
     boolean wifiScanResultProcessed = false;
+    private boolean wifiOn = true;
 
     TextView mqttStatusTextView;
     String statusMsg;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
                 wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
                 if (wifi.isWifiEnabled() == false) {
+                    wifiOn = false;
                     Toast.makeText(getApplicationContext(), "Wifi is disabled. Turning on", Toast.LENGTH_SHORT).show();
                     wifi.setWifiEnabled(true);
                 }
@@ -276,10 +278,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(LOG_TAG, "network selected: #" + position + ", " + itemArray[position] + " / " + itemArray.length);
                             Intent deviceConfigurationActivity = new Intent(getApplicationContext(), DeviceAdd.class);
                             deviceConfigurationActivity.putExtra(Intent.EXTRA_TEXT, itemArray[position]);
-                            //for manuall add
-                            //                        if (position != itemArray.length -1) {
                             deviceConfigurationActivity.putExtra("SSID", itemArray[position]);
-                            //                        }
+                            deviceConfigurationActivity.putExtra("wifiOn", wifiOn);
                             startActivity(deviceConfigurationActivity);
 
                         }

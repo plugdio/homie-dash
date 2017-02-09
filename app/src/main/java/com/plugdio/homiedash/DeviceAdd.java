@@ -48,6 +48,8 @@ import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 public class DeviceAdd extends AppCompatActivity {
     private String LOG_TAG = "DeviceAdd";
 
+    private boolean wifiOn = true;
+
     private String deviceId;
     private EditText eWifiNetwork;
     private EditText eWifiPass;
@@ -91,6 +93,8 @@ public class DeviceAdd extends AppCompatActivity {
         Intent intent = this.getIntent();
 
         if ((intent != null) && (intent.hasExtra("SSID"))) {
+
+            wifiOn = intent.getBooleanExtra("wifiOn", true);
 
             String deviceIdPattern = "Homie-(.*)";
 
@@ -346,6 +350,10 @@ public class DeviceAdd extends AppCompatActivity {
                 startActivity(new Intent(DeviceAdd.this, MainActivity.class));
             } else {
                 Toast.makeText(getApplicationContext(), "Device could not be added", Toast.LENGTH_SHORT).show();
+            }
+
+            if (!wifiOn) {
+                wifiManager.setWifiEnabled(false);
             }
         }
 
