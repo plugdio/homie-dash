@@ -87,7 +87,8 @@ public class HomieDashService extends Service {
         //     disconnection
         NOTCONNECTED_DATADISABLED,          // can't connect because the user
         //     has disabled data access
-        NOTCONNECTED_UNKNOWNREASON          // failed to connect for some reason
+        NOTCONNECTED_UNKNOWNREASON,          // failed to connect for some reason
+        NOTCONNECTED_NONETWORK
     }
 
     // receiver that notifies the Service when the phone gets data connection
@@ -278,7 +279,13 @@ public class HomieDashService extends Service {
                     // Something went wrong e.g. connection timeout or firewall problems
                     log(LogEntry.LOGTYPE_LOG, null, null, "onFailure: " + exception);
                     Log.e(LOG_TAG, "onFailure: " + exception);
-                    changeStatus(ConnectionStatus.NOTCONNECTED_UNKNOWNREASON);
+
+                    if (exception.getCause() instanceof java.net.UnknownHostException) {
+                        changeStatus(ConnectionStatus.NOTCONNECTED_NONETWORK);
+                    } else {
+                        Log.d(LOG_TAG, "cause: " + exception.getCause().getClass().getName());
+                        changeStatus(ConnectionStatus.NOTCONNECTED_UNKNOWNREASON);
+                    }
 
                     // if something has failed, we wait for one keep-alive period before
                     //   trying again

@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView mqttStatusTextView;
     String statusMsg;
+    private HomieDashService.ConnectionStatus statusCode = HomieDashService.ConnectionStatus.INITIAL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
             for (Device d : itr) {
 
+                if (statusCode != HomieDashService.ConnectionStatus.CONNECTED) {
+                    d.online = "false";
+                }
                 deviceEntries.add(d);
             }
         } finally {
@@ -181,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle notificationData = intent.getExtras();
-            HomieDashService.ConnectionStatus statusCode =
+            statusCode =
                     HomieDashService.ConnectionStatus.class.getEnumConstants()[notificationData.getInt(
                             HomieDashService.MQTT_STATUS_CODE)];
             statusMsg = notificationData.getString(
@@ -198,6 +202,13 @@ public class MainActivity extends AppCompatActivity {
                 alertImage.setVisibility(View.INVISIBLE);
                 alertText.setVisibility(View.INVISIBLE);
             }
+
+            if (statusCode != HomieDashService.ConnectionStatus.CONNECTED) {
+                for (Device device : deviceEntries) {
+                    device.online = "false";
+                }
+            }
+
         }
     };
 

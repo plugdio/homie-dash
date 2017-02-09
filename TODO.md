@@ -4,9 +4,3 @@
 
 ### Service
 - restart mqtt service after device reboot
-
-### Device search
-- turn off wifi if it was turned off originally
-
-### Device list
-- if mqtt connection is off, devices should not look onlince
