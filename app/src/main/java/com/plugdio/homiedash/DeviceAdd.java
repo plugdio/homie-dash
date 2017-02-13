@@ -55,6 +55,12 @@ public class DeviceAdd extends AppCompatActivity {
     private EditText eWifiPass;
     private EditText eDeviceFriendlyName;
     private EditText eDeviceDescription;
+    private EditText eMQTTHost;
+    private EditText eMQTTPort;
+    private CheckBox cMQTTAuth;
+    private EditText eMQTTUser;
+    private EditText eMQTTPass;
+    private EditText eHomieBaseTopic;
     private String mqttHost;
     private String mqttPort;
     private boolean mqttAuth;
@@ -122,25 +128,49 @@ public class DeviceAdd extends AppCompatActivity {
         eWifiPass = (EditText) findViewById(R.id.input_wifipass);
         eWifiPass.setText(wifiPass);
 
-        EditText eMQTTHost = (EditText) findViewById(R.id.input_mqtthost);
+        eMQTTHost = (EditText) findViewById(R.id.input_mqtthost);
         eMQTTHost.setText(mqttHost);
 
-        EditText eMQTTPort = (EditText) findViewById(R.id.input_mqttport);
+        eMQTTPort = (EditText) findViewById(R.id.input_mqttport);
         eMQTTPort.setText(mqttPort);
 
-        CheckBox cMQTTAuth = (CheckBox) findViewById(R.id.mqtt_authentication);
+        cMQTTAuth = (CheckBox) findViewById(R.id.mqtt_authentication);
         cMQTTAuth.setChecked(mqttAuth);
 
-        final EditText eMQTTUser = (EditText) findViewById(R.id.input_mqttuser);
-
+        eMQTTUser = (EditText) findViewById(R.id.input_mqttuser);
+        eMQTTPass = (EditText) findViewById(R.id.input_mqttpass);
+/*
         if (!mqttAuth) {
             eMQTTUser.setEnabled(false);
         } else {
+  */
             eMQTTUser.setText(mqttUser);
+        //       }
+
+        eHomieBaseTopic = (EditText) findViewById(R.id.input_homiebasetopic);
+        eHomieBaseTopic.setText(homieBaseTopic);
+
+        if (mqttHost.equals("") || mqttHost == null) {
+            eMQTTHost.setEnabled(true);
+            eMQTTPort.setEnabled(true);
+            cMQTTAuth.setEnabled(true);
+            eMQTTUser.setEnabled(true);
+            eMQTTPass.setEnabled(true);
+            eHomieBaseTopic.setEnabled(true);
+
+            cMQTTAuth.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    eMQTTUser.setEnabled(((CheckBox) v).isChecked());
+                    eMQTTPass.setEnabled(((CheckBox) v).isChecked());
+
+                }
+            });
+
         }
 
-        EditText eHomeBaseTopic = (EditText) findViewById(R.id.input_homiebasetopic);
-        eHomeBaseTopic.setText(homieBaseTopic);
+
 
     }
 
@@ -152,6 +182,21 @@ public class DeviceAdd extends AppCompatActivity {
         2. send config as json
         3. restore wifi
          */
+
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+
+        if (mqttHost.equals("") || mqttHost == null) {
+            sharedPrefsEditor.putString("mqtt_broker_address", eMQTTHost.getText().toString());
+            sharedPrefsEditor.putString("mqtt_broker_port", eMQTTPort.getText().toString());
+            sharedPrefsEditor.putBoolean("mqtt_authentication_switch", cMQTTAuth.isChecked());
+            sharedPrefsEditor.putString("mqtt_username", eMQTTUser.getText().toString());
+            sharedPrefsEditor.putString("mqtt_password", eMQTTPass.getText().toString());
+            sharedPrefsEditor.putString("homie_base_topic", eHomieBaseTopic.getText().toString());
+
+            sharedPrefsEditor.commit();
+        }
 
         String deviceName = eDeviceFriendlyName.getText().toString();
         String deviceDescription = eDeviceDescription.getText().toString();

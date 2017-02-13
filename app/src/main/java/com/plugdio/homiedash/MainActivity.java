@@ -298,6 +298,20 @@ public class MainActivity extends AppCompatActivity {
                     .create();
             d.show();
         } else {
+//TEST
+/*
+            Intent deviceConfigurationActivity = new Intent(getApplicationContext(), DeviceAdd.class);
+            deviceConfigurationActivity.putExtra(Intent.EXTRA_TEXT, 0);
+            deviceConfigurationActivity.putExtra("SSID", "Homie-1234");
+            deviceConfigurationActivity.putExtra("wifiOn", wifiOn);
+            startActivity(deviceConfigurationActivity);
+*/
+
+            if (!wifiOn) {
+                WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+                wifiManager.setWifiEnabled(false);
+            }
+
             Dialog d = new AlertDialog.Builder(context)
 //                    .setTitle("No Homie device(s) found")
                     .setMessage("No Homie device(s) found")

@@ -4,3 +4,6 @@
 
 ### Service
 - restart mqtt service after device reboot
+
+### DeviceAdd
+- if there are no settings, enable input fiedls and save setting
