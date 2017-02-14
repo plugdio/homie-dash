@@ -198,6 +198,13 @@ public class DeviceAdd extends AppCompatActivity {
             sharedPrefsEditor.commit();
         }
 
+        mqttHost = eMQTTHost.getText().toString();
+        mqttPort = eMQTTPort.getText().toString();
+        homieBaseTopic = eHomieBaseTopic.getText().toString();
+        mqttAuth = cMQTTAuth.isChecked();
+        mqttUser = eMQTTUser.getText().toString();
+        mqttPass = eMQTTPass.getText().toString();
+
         String deviceName = eDeviceFriendlyName.getText().toString();
         String deviceDescription = eDeviceDescription.getText().toString();
         String deviceWifiNetwork = eWifiNetwork.getText().toString();
@@ -272,6 +279,9 @@ public class DeviceAdd extends AppCompatActivity {
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, "JSONException: " + e.getMessage());
+        } catch (java.lang.NumberFormatException e) {
+            Log.e(LOG_TAG, "NumberFormatException: " + mqttPort + " - " + e.getMessage());
+            return;
         }
 
 

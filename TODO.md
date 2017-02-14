@@ -5,5 +5,7 @@
 ### Service
 - restart mqtt service after device reboot
 
-### DeviceAdd
-- if there are no settings, enable input fiedls and save setting
+### Bugs
+- wifi turns off even if it was on when no device found
+- timeout for json upload. disconnect and delete homie network
+- online status doesn't update in device list

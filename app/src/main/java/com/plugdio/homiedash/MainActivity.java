@@ -1,5 +1,6 @@
 package com.plugdio.homiedash;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -127,42 +130,96 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                if (wifi.isWifiEnabled() == false) {
-                    wifiOn = false;
-                    Toast.makeText(getApplicationContext(), "Wifi is disabled. Turning on", Toast.LENGTH_SHORT).show();
-                    wifi.setWifiEnabled(true);
+                Log.d(LOG_TAG, "onClick to add device");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LOG_TAG, "Requesting permission");
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            0x12345);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+
+                } else {
+                    getWifiNetworks();
+                    //do something, permission was previously granted; or legacy device
                 }
-                wifiScanResultProcessed = false;
-
-                // register WiFi scan results receiver
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-                registerReceiver(wifiReceiver, filter);
-
-                if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
-                    wifi.startScan();
-                    Log.d(LOG_TAG, "wifi scanning stared");
-                }
-
-                new CountDownTimer(3000, 1000) {
-
-                    public void onTick(long millisUntilFinished) {
-                        Log.d(LOG_TAG, "wifi scan seconds remaining: " + millisUntilFinished / 1000);
-                    }
-
-                    public void onFinish() {
-                        Log.d(LOG_TAG, "wifi scan done!");
-                        if (!wifiScanResultProcessed) {
-                            Log.d(LOG_TAG, "No wifi found");
-                            unregisterReceiver(wifiReceiver);
-                            displayWifiList(new ArrayList<String>());
-                        }
-                    }
-                }.start();
-
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+
+        Log.d(LOG_TAG, "onRequestPermissionsResult: " + requestCode);
+
+        if (requestCode == 0x12345
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Do something with granted permission
+            getWifiNetworks();
+        }
+    }
+
+    private void getWifiNetworks() {
+
+        Log.d(LOG_TAG, "getWifiNetworks started");
+
+        wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        if (wifi.isWifiEnabled() == false) {
+            wifiOn = false;
+            Toast.makeText(getApplicationContext(), "Wifi is disabled. Turning on", Toast.LENGTH_SHORT).show();
+            wifi.setWifiEnabled(true);
+        }
+        wifiScanResultProcessed = false;
+
+        // register WiFi scan results receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        registerReceiver(wifiReceiver, filter);
+
+        if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+            wifi.startScan();
+            Log.d(LOG_TAG, "wifi scanning stared");
+        }
+
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                Log.d(LOG_TAG, "wifi scan seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                Log.d(LOG_TAG, "wifi scan done! " + wifi.getScanResults().size());
+                if (!wifiScanResultProcessed) {
+
+                    //On android 6 wifiReceiver.onReceive is not called :(
+                    if (wifi.getScanResults().size() > 0) {
+                        String deviceIdPattern = "Homie-(.*)";
+                        Pattern r = Pattern.compile(deviceIdPattern);
+
+                        List<ScanResult> results = wifi.getScanResults();
+                        List<String> items = new ArrayList<String>();
+                        int i;
+                        for (i = 0; i < results.size(); ++i) {
+                            //items.add(results.get(i).SSID);
+                            Log.d(LOG_TAG, i + ". wifi network: " + results.get(i).SSID);
+                            Log.d(LOG_TAG, i + ". wifi network: " + results.get(i).toString());
+
+                            Matcher m = r.matcher(results.get(i).SSID);
+                            if (m.find()) {
+                                items.add(results.get(i).SSID);
+                            }
+                        }
+                        wifiScanResultProcessed = true;
+                        displayWifiList(items);
+                    } else {
+
+                        Log.d(LOG_TAG, "No wifi found");
+                        unregisterReceiver(wifiReceiver);
+                        displayWifiList(new ArrayList<String>());
+                    }
+                }
+            }
+        }.start();
     }
 
     public void EditDevice(View view) {
@@ -244,10 +301,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent arg1) {
 
+            Log.d(LOG_TAG, "wifiReceiver started");
+/*
             String deviceIdPattern = "Homie-(.*)";
             Pattern r = Pattern.compile(deviceIdPattern);
 
@@ -265,9 +324,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             wifiScanResultProcessed = true;
+*/
             context.unregisterReceiver(this);
-            displayWifiList(items);
+//            displayWifiList(items);
         }
+
     };
 
 
